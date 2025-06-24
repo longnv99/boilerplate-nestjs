@@ -1,0 +1,16 @@
+# compiled output
+/node_modules
+/dist
+
+# Logs
+npm-debug.log*
+
+# Docker
+docker-compose.dev.yml
+docker-compose.prod.yml
+
+# OS
+/mongo-data
+
+# Gitignore
+.git
