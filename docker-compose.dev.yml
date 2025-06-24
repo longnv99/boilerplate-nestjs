@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  app_dev: # Đổi tên service để phân biệt
+    container_name: boilerplate-nest-dev
+    image: boilerplate-nest-dev
+    build:
+      context: .
+      target: development
+    ports:
+      - "${PORT}:${PORT}" # Có thể hardcode hoặc dùng biến env
+    env_file:
+      - .env.development # Tải biến môi trường cho dev
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules # Rất quan trọng cho dev
+    restart: unless-stopped

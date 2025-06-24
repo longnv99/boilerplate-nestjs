@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  app_prod:
+    container_name: boilerplate-nest-prod
+    image: boilerplate-nest-prod
+    build:
+      context: .
+      # Không cần target, mặc định sẽ build giai đoạn cuối cùng
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env # Vẫn giữ để app NestJS bên trong đọc được
+    restart: always
