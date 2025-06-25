@@ -11,6 +11,7 @@ import {
   Collection,
   CollectionSchema,
 } from '../collection/entities/collection.entity';
+import { UsersRepository } from '@/repositories/users.repository';
 
 @Module({
   imports: [
@@ -29,6 +30,9 @@ import {
     ]),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [
+    UsersService,
+    { provide: 'UsersRepositoryInterface', useClass: UsersRepository },
+  ],
 })
 export class UsersModule {}
