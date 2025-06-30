@@ -15,7 +15,10 @@ export abstract class BaseRepositoryAbstract<T extends BaseEntity>
 
   async findOneById(id: string): Promise<T> {
     const item = await this.model.findById(id);
-    return item.deletedAt ? null : item;
+    if (!item || item.deletedAt) {
+      return null;
+    }
+    return item;
   }
 
   async findOneByCondition(

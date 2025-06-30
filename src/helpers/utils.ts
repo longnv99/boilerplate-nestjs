@@ -1,18 +1,17 @@
 import { BadRequestException } from '@nestjs/common';
-import { compare, genSalt, hash } from 'bcrypt-ts';
+import { hash, verify } from 'argon2';
 
-export const hashPasswordHelper = async (plainPassword: string) => {
+export const hashContent = async (plainContent: string) => {
   try {
-    const salt = await genSalt(10);
-    return await hash(plainPassword, salt);
+    return await hash(plainContent);
   } catch (error) {}
 };
 
-export const comparePasswordHelper = async (
-  plainPassword: string,
-  hashPassword: string,
+export const compareContent = async (
+  plainContent: string,
+  hashedContent: string,
 ) => {
-  const is_matching = await compare(plainPassword, hashPassword);
+  const is_matching = await verify(hashedContent, plainContent);
   if (!is_matching) {
     throw new BadRequestException();
   }

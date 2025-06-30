@@ -73,6 +73,7 @@ export class User extends BaseEntity {
   @Prop({
     required: true,
   })
+  @Exclude()
   password: string;
 
   @Prop({
@@ -115,6 +116,10 @@ export class User extends BaseEntity {
   address: Address[];
 
   defaultAddress?: string;
+
+  @Prop()
+  @Exclude()
+  currentRefreshToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

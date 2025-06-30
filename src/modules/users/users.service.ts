@@ -28,4 +28,14 @@ export class UsersService extends BaseServiceAbstract<User> {
       throw error;
     }
   }
+
+  async setCurrentRefreshToken(userId: string, hashedToken: string) {
+    try {
+      await this.usersRepository.update(userId, {
+        currentRefreshToken: hashedToken,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
