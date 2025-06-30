@@ -8,11 +8,14 @@ services:
       target: development
     ports:
       - "${PORT}:${PORT}"
+    depends_on:
+      - app_mongodb_dev
     env_file:
       - .env.development
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
+    command: npm run start:dev
     restart: unless-stopped
 
   app_mongodb_dev:

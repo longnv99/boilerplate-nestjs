@@ -7,13 +7,13 @@ export interface BaseRepositoryInterface<T> {
   findOneById(id: string): Promise<T>;
 
   findOneByCondition(
-    condition?: object,
+    condition?: FilterQuery<T>,
     projection?: string,
     options?: QueryOptions,
   ): Promise<T>;
 
   findAll(
-    condition: FilterQuery<T>,
+    condition?: FilterQuery<T>,
     projection?: string,
     options?: QueryOptions,
   ): Promise<FindAllResponse<T>>;

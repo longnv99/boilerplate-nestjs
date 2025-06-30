@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from '@/repositories/users.repository';
 import { BaseServiceAbstract } from '@/services/base/base.abstract.service';
@@ -15,5 +15,17 @@ export class UsersService extends BaseServiceAbstract<User> {
 
   async create(createUserDto: CreateUserDto) {
     return this.usersRepository.create(createUserDto);
+  }
+
+  async getUserByEmail(email: string) {
+    try {
+      const user = await this.usersRepository.findOneByCondition({ email });
+      if (!user) {
+        throw new NotFoundException();
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
   }
 }

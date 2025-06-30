@@ -10,6 +10,7 @@ import {
 import { TopicsService } from './topics.service';
 import { CreateTopicDto } from './dto/create-topic.dto';
 import { UpdateTopicDto } from './dto/update-topic.dto';
+import { Public } from '@/decorators/auth.decorators';
 
 @Controller('topics')
 export class TopicsController {
@@ -21,6 +22,7 @@ export class TopicsController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.topicsService.findAll();
   }

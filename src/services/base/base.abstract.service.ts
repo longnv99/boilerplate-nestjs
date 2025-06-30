@@ -32,4 +32,16 @@ export abstract class BaseServiceAbstract<T extends BaseEntity>
   async findOne(id: string): Promise<T> {
     return await this.repository.findOneById(id);
   }
+
+  async findOneByCondition(
+    condition: FilterQuery<T>,
+    projection?: string,
+    options?: QueryOptions,
+  ): Promise<T> {
+    return await this.repository.findOneByCondition(
+      condition,
+      projection,
+      options,
+    );
+  }
 }

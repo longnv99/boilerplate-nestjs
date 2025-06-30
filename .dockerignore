@@ -1,16 +1,15 @@
 # compiled output
-/node_modules
-/dist
+node_modules
+dist
 
 # Logs
 npm-debug.log*
 
 # Docker
-docker-compose.dev.yml
-docker-compose.prod.yml
+docker-compose*
 
 # OS
-/mongo-data
+mongo-data
 
 # Gitignore
 .git

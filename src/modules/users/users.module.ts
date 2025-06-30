@@ -34,5 +34,6 @@ import { UsersRepository } from '@/repositories/users.repository';
     UsersService,
     { provide: 'UsersRepositoryInterface', useClass: UsersRepository },
   ],
+  exports: [UsersService],
 })
 export class UsersModule {}

@@ -9,6 +9,9 @@ import { UsersModule } from './modules/users/users.module';
 import { TopicsModule } from './modules/topics/topics.module';
 import { FlashCardsModule } from './modules/flash-cards/flash-cards.module';
 import { CollectionModule } from './modules/collection/collection.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAccessTokenGuard } from './modules/auth/guards/jwt-access-token.guard';
 
 @Module({
   imports: [
@@ -36,8 +39,15 @@ import { CollectionModule } from './modules/collection/collection.module';
     TopicsModule,
     FlashCardsModule,
     CollectionModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAccessTokenGuard,
+    },
+  ],
 })
 export class AppModule {}

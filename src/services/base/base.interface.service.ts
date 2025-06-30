@@ -14,6 +14,11 @@ export interface Read<T> {
     options?: QueryOptions,
   ): Promise<FindAllResponse<T>>;
   findOne(id: string): Promise<T>;
+  findOneByCondition(
+    condition: FilterQuery<T>,
+    projection?: string,
+    options?: QueryOptions,
+  ): Promise<T>;
 }
 
 export interface BaseServiceInterface<T> extends Write<T>, Read<T> {}

@@ -24,7 +24,7 @@ export abstract class BaseRepositoryAbstract<T extends BaseEntity>
     options?: QueryOptions,
   ): Promise<T> {
     return await this.model
-      .findById({ ...condition, deletedAt: null }, projection, options)
+      .findOne({ ...condition, deletedAt: null }, projection, options)
       .exec();
   }
 
