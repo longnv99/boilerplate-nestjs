@@ -10,7 +10,7 @@ import {
 import { TopicsService } from './topics.service';
 import { CreateTopicDto } from './dto/create-topic.dto';
 import { UpdateTopicDto } from './dto/update-topic.dto';
-import { Public } from '@/decorators/auth.decorators';
+import { Public } from '@/decorators/auth.decorator';
 
 @Controller('topics')
 export class TopicsController {

@@ -1,5 +1,7 @@
 import { BaseRepositoryInterface } from '@/repositories/base/base.interface.repository';
-import { UserDocument } from '../entities/user.entity';
+import { User, UserDocument } from '../entities/user.entity';
 
 export interface UserRepositoryInterface
-  extends BaseRepositoryInterface<UserDocument> {}
+  extends BaseRepositoryInterface<UserDocument> {
+  getUserWithRole(userId: string): Promise<User>;
+}

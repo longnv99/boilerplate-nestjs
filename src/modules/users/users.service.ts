@@ -1,20 +1,41 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from '@/repositories/users.repository';
 import { BaseServiceAbstract } from '@/services/base/base.abstract.service';
 import { User } from './entities/user.entity';
+import { UserRolesService } from '../user-roles/user-roles.service';
+import { USER_ROLE } from '../user-roles/entities/user-role.entity';
 
 @Injectable()
 export class UsersService extends BaseServiceAbstract<User> {
   constructor(
     @Inject('UsersRepositoryInterface')
     private readonly usersRepository: UsersRepository,
+    private readonly userRolesService: UserRolesService,
   ) {
     super(usersRepository);
   }
 
   async create(createUserDto: CreateUserDto) {
-    return this.usersRepository.create(createUserDto);
+    const userRole = await this.userRolesService.findOneByCondition({
+      name: USER_ROLE.USER,
+    });
+
+    if (!userRole) {
+      throw new InternalServerErrorException(
+        'Default USER role not found. Please seed the database',
+      );
+    }
+
+    return this.usersRepository.create({
+      ...createUserDto,
+      role: userRole._id,
+    });
   }
 
   async getUserByEmail(email: string) {
@@ -34,6 +55,14 @@ export class UsersService extends BaseServiceAbstract<User> {
       await this.usersRepository.update(userId, {
         currentRefreshToken: hashedToken,
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getUserWithRole(userId: string): Promise<User> {
+    try {
+      return await this.usersRepository.getUserWithRole(userId);
     } catch (error) {
       throw error;
     }

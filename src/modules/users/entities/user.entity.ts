@@ -6,7 +6,7 @@ import { Address, AddressSchema } from './address.entity';
 import { FlashCardDocument } from '@/modules/flash-cards/entities/flash-card.entity';
 import { CollectionDocument } from '@/modules/collection/entities/collection.entity';
 import { NextFunction } from 'express';
-import { Exclude, Type } from 'class-transformer';
+import { Exclude, Transform, Type } from 'class-transformer';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -97,6 +97,8 @@ export class User extends BaseEntity {
     type: mongoose.Schema.Types.ObjectId,
     ref: UserRole.name,
   })
+  @Type(() => UserRole)
+  @Transform((value) => value.obj.role?.name, { toClassOnly: true })
   role: UserRole;
 
   @Prop()

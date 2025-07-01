@@ -12,6 +12,7 @@ import {
   CollectionSchema,
 } from '../collection/entities/collection.entity';
 import { UsersRepository } from '@/repositories/users.repository';
+import { UserRolesModule } from '../user-roles/user-roles.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UsersRepository } from '@/repositories/users.repository';
         ],
       },
     ]),
+    UserRolesModule,
   ],
   controllers: [UsersController],
   providers: [

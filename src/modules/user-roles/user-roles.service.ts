@@ -1,26 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { BaseServiceAbstract } from '@/services/base/base.abstract.service';
+import { UserRole } from './entities/user-role.entity';
+import { UserRolesRepository } from '@/repositories/user-roles.repository';
 import { CreateUserRoleDto } from './dto/create-user-role.dto';
-import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 
 @Injectable()
-export class UserRolesService {
-  create(createUserRoleDto: CreateUserRoleDto) {
-    return 'This action adds a new userRole';
+export class UserRolesService extends BaseServiceAbstract<UserRole> {
+  constructor(
+    @Inject('UserRolesRepositoryInterface')
+    private readonly userRolesRepository: UserRolesRepository,
+  ) {
+    super(userRolesRepository);
   }
 
-  findAll() {
-    return `This action returns all userRoles`;
-  }
+  async create(createUserRoleDto: CreateUserRoleDto) {
+    const exitedUserRole = await this.userRolesRepository.findOneByCondition({
+      name: createUserRoleDto.name.toUpperCase(),
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} userRole`;
-  }
+    if (exitedUserRole) {
+      throw new ConflictException(
+        `Role ${createUserRoleDto.name.toUpperCase()} already exists.`,
+      );
+    }
 
-  update(id: number, updateUserRoleDto: UpdateUserRoleDto) {
-    return `This action updates a #${id} userRole`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} userRole`;
+    return this.userRolesRepository.create(createUserRoleDto);
   }
 }
