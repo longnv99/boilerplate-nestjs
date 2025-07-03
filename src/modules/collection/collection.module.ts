@@ -3,6 +3,7 @@ import { CollectionService } from './collection.service';
 import { CollectionController } from './collection.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Collection, CollectionSchema } from './entities/collection.entity';
+import { CollectionRepository } from '@/repositories/collection.repository';
 
 @Module({
   imports: [
@@ -14,6 +15,12 @@ import { Collection, CollectionSchema } from './entities/collection.entity';
     ]),
   ],
   controllers: [CollectionController],
-  providers: [CollectionService],
+  providers: [
+    CollectionService,
+    {
+      provide: 'CollectionRepositoryInterface',
+      useClass: CollectionRepository,
+    },
+  ],
 })
 export class CollectionModule {}

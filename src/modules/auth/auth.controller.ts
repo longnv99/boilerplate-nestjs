@@ -5,8 +5,10 @@ import { RequestWithUser } from '@/types/request.type';
 import { LocalAuthGuard } from './guards/local.guard';
 import { JwtRefreshTokenGuard } from './guards/jwt-refresh-token.guard';
 import { Public } from '@/decorators/auth.decorator';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -18,6 +20,23 @@ export class AuthController {
 
   @Public()
   @UseGuards(LocalAuthGuard)
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          example: 'user@example.com',
+        },
+        password: {
+          type: 'string',
+          format: 'password',
+          example: 'yourStrongPassword123',
+        },
+      },
+      required: ['email', 'password'],
+    },
+  })
   @Post('sign-in')
   async signIn(@Req() req: RequestWithUser) {
     return this.authService.signIn(req.user);
@@ -25,6 +44,10 @@ export class AuthController {
 
   @Public()
   @UseGuards(JwtRefreshTokenGuard)
+  @ApiOperation({
+    summary:
+      'Use the Refresh Token (sent in the Authorization header) to get a new Access Token.',
+  })
   @Post('refresh-token')
   async refreshToken(@Req() req: RequestWithUser) {
     const { user } = req;

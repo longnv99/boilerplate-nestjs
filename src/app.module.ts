@@ -34,12 +34,12 @@ import { JwtAccessTokenGuard } from './modules/auth/guards/jwt-access-token.guar
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
     UserRolesModule,
     UsersModule,
     TopicsModule,
     FlashCardsModule,
     CollectionModule,
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [

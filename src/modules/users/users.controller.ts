@@ -15,8 +15,11 @@ import { User } from './entities/user.entity';
 import { Roles } from '@/decorators/roles.decorator';
 import { USER_ROLE } from '../user-roles/entities/user-role.entity';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags('Users')
+@ApiBearerAuth()
 @UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
