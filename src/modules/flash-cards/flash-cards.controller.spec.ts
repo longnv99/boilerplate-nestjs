@@ -8,7 +8,10 @@ describe('FlashCardsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FlashCardsController],
-      providers: [FlashCardsService],
+      providers: [
+        FlashCardsService,
+        { provide: 'FlashCardsRepositoryInterface', useValue: {} },
+      ],
     }).compile();
 
     controller = module.get<FlashCardsController>(FlashCardsController);

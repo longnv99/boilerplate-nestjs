@@ -14,7 +14,7 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --detectOpenHandles --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
@@ -94,7 +94,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -102,7 +102,18 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@/common/(.*)$": "<rootDir>/src/common/$1",
+      "^@/configs/(.*)$": "<rootDir>/src/configs/$1",
+      "^@/decorators/(.*)$": "<rootDir>/src/decorators/$1",
+      "^@/helpers/(.*)$": "<rootDir>/src/helpers/$1",
+      "^@/interceptors/(.*)$": "<rootDir>/src/interceptors/$1",
+      "^@/modules/(.*)$": "<rootDir>/src/modules/$1",
+      "^@/repositories/(.*)$": "<rootDir>/src/repositories/$1",
+      "^@/services/(.*)$": "<rootDir>/src/services/$1",
+      "^@/types/(.*)$": "<rootDir>/src/types/$1"
+    }
   }
 }

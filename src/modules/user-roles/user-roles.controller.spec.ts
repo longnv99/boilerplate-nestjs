@@ -8,7 +8,10 @@ describe('UserRolesController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserRolesController],
-      providers: [UserRolesService],
+      providers: [
+        UserRolesService,
+        { provide: 'UserRolesRepositoryInterface', useValue: {} },
+      ],
     }).compile();
 
     controller = module.get<UserRolesController>(UserRolesController);

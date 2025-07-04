@@ -6,7 +6,10 @@ describe('FlashCardsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [FlashCardsService],
+      providers: [
+        FlashCardsService,
+        { provide: 'FlashCardsRepositoryInterface', useValue: {} },
+      ],
     }).compile();
 
     service = module.get<FlashCardsService>(FlashCardsService);
