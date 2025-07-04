@@ -10,13 +10,11 @@ export interface Write<T> {
 export interface Read<T> {
   findAll(
     condition: FilterQuery<T>,
-    projection?: string,
     options?: QueryOptions,
   ): Promise<FindAllResponse<T>>;
   findOne(id: string): Promise<T>;
   findOneByCondition(
     condition: FilterQuery<T>,
-    projection?: string,
     options?: QueryOptions,
   ): Promise<T>;
 }

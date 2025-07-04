@@ -9,13 +9,22 @@ import {
   UseInterceptors,
   UploadedFile,
   Req,
+  Query,
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { COLLECTION_LEVEL } from './entities/collection.entity';
 import { RequestWithUser } from '@/types/request.type';
+import { FindAllCollectionDto } from './dto/find-all-collection.dto';
+import { ApiDocsPagination } from '@/decorators/swagger-form-data.decorator';
 
 @Controller('collection')
 @ApiTags('Collections')
@@ -64,15 +73,17 @@ export class CollectionController {
     });
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.collectionService.findAll();
-  // }
+  @Get()
+  @ApiDocsPagination()
+  findAll(@Query() query: FindAllCollectionDto) {
+    const { limit, offset, ...filter } = query;
+    return this.collectionService.findAll({ ...filter }, { limit, offset });
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.collectionService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.collectionService.findOne(id);
+  }
 
   // @Patch(':id')
   // update(

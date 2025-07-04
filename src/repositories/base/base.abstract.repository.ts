@@ -23,22 +23,24 @@ export abstract class BaseRepositoryAbstract<T extends BaseEntity>
 
   async findOneByCondition(
     condition?: object,
-    projection?: string,
     options?: QueryOptions,
   ): Promise<T> {
     return await this.model
-      .findOne({ ...condition, deletedAt: null }, projection, options)
+      .findOne({ ...condition, deletedAt: null }, options?.projection, options)
       .exec();
   }
 
   async findAll(
     condition: FilterQuery<T>,
-    projection?: string,
     options?: QueryOptions,
   ): Promise<FindAllResponse<T>> {
     const [count, items] = await Promise.all([
       this.model.countDocuments({ ...condition, deletedAt: null }),
-      this.model.find({ ...condition, deletedAt: null }, projection, options),
+      this.model.find(
+        { ...condition, deletedAt: null },
+        options?.projection,
+        options,
+      ),
     ]);
     return {
       count,

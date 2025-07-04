@@ -23,10 +23,9 @@ export abstract class BaseServiceAbstract<T extends BaseEntity>
 
   async findAll(
     condition: FilterQuery<T>,
-    projection?: string,
     options?: QueryOptions,
   ): Promise<FindAllResponse<T>> {
-    return await this.repository.findAll(condition, projection, options);
+    return await this.repository.findAll(condition, options);
   }
 
   async findOne(id: string): Promise<T> {
@@ -35,13 +34,8 @@ export abstract class BaseServiceAbstract<T extends BaseEntity>
 
   async findOneByCondition(
     condition: FilterQuery<T>,
-    projection?: string,
     options?: QueryOptions,
   ): Promise<T> {
-    return await this.repository.findOneByCondition(
-      condition,
-      projection,
-      options,
-    );
+    return await this.repository.findOneByCondition(condition, options);
   }
 }
