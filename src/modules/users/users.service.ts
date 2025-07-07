@@ -10,6 +10,7 @@ import { BaseServiceAbstract } from '@/services/base/base.abstract.service';
 import { User } from './entities/user.entity';
 import { UserRolesService } from '../user-roles/user-roles.service';
 import { USER_ROLE } from '../user-roles/entities/user-role.entity';
+import { ERROR_DICTIONARY } from '@/constraints/error-dictionary.constraint';
 
 @Injectable()
 export class UsersService extends BaseServiceAbstract<User> {
@@ -27,9 +28,10 @@ export class UsersService extends BaseServiceAbstract<User> {
     });
 
     if (!userRole) {
-      throw new InternalServerErrorException(
-        'Default USER role not found. Please seed the database',
-      );
+      throw new InternalServerErrorException({
+        errorCode: ERROR_DICTIONARY.USER_ROLE_NOT_FOUND,
+        message: 'Default USER role not found. Please seed the database',
+      });
     }
 
     return this.usersRepository.create({

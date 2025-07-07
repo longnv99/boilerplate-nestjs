@@ -107,7 +107,9 @@
     "moduleNameMapper": {
       "^@/common/(.*)$": "<rootDir>/src/common/$1",
       "^@/configs/(.*)$": "<rootDir>/src/configs/$1",
+      "^@/constraints/(.*)$": "<rootDir>/src/constraints/$1",
       "^@/decorators/(.*)$": "<rootDir>/src/decorators/$1",
+      "^@/exceptions/(.*)$": "<rootDir>/src/exceptions/$1",
       "^@/helpers/(.*)$": "<rootDir>/src/helpers/$1",
       "^@/interceptors/(.*)$": "<rootDir>/src/interceptors/$1",
       "^@/modules/(.*)$": "<rootDir>/src/modules/$1",

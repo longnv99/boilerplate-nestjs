@@ -11,6 +11,8 @@ import { TokenPayload } from './interfaces/token.interface';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../users/entities/user.entity';
+import { ERROR_DICTIONARY } from '@/constraints/error-dictionary.constraint';
+import { error } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +29,10 @@ export class AuthService {
       });
 
       if (existedUser) {
-        throw new ConflictException('Email already existed!');
+        throw new ConflictException({
+          errorCode: ERROR_DICTIONARY.EMAIL_ALREADY_EXISTS,
+          message: 'Email already exists',
+        });
       }
 
       const hashPassword = await hashContent(signUpDTO.password);
@@ -73,7 +78,10 @@ export class AuthService {
       await compareContent(password, user.password);
       return user;
     } catch (error) {
-      throw new BadRequestException('Wrong credentials!!');
+      throw new BadRequestException({
+        errorCode: ERROR_DICTIONARY.WRONG_CREDENTIALS,
+        message: 'Email or Password incorrect',
+      });
     }
   }
 

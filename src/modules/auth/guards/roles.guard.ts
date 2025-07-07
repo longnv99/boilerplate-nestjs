@@ -1,3 +1,4 @@
+import { ERROR_DICTIONARY } from '@/constraints/error-dictionary.constraint';
 import { ROLES } from '@/decorators/roles.decorator';
 import { RequestWithUser } from '@/types/request.type';
 import {
@@ -27,7 +28,10 @@ export class RolesGuard implements CanActivate {
     const hasPermission = roles.includes(request.user.role.name);
 
     if (!hasPermission) {
-      throw new ForbiddenException('User has no permission');
+      throw new ForbiddenException({
+        errorCode: ERROR_DICTIONARY.USER_NOT_PERMISSION,
+        message: 'You do not have permission to access this resource.',
+      });
     }
 
     return true;
