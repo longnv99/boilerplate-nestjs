@@ -12,6 +12,7 @@ import { CollectionModule } from './modules/collection/collection.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAccessTokenGuard } from './modules/auth/guards/jwt-access-token.guard';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -40,6 +41,17 @@ import { JwtAccessTokenGuard } from './modules/auth/guards/jwt-access-token.guar
     TopicsModule,
     FlashCardsModule,
     CollectionModule,
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        connection: {
+          host: configService.get<string>('REDIS_HOST'),
+          port: configService.get<number>('REDIS_PORT'),
+          password: configService.get<string>('REDIS_PASSWORD'),
+        },
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
   providers: [

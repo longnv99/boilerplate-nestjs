@@ -4,12 +4,18 @@ import { FlashCardsController } from './flash-cards.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FlashCard, FlashCardSchema } from './entities/flash-card.entity';
 import { FlashCardsRepository } from '@/repositories/flash-cards.repository';
+import { BullModule } from '@nestjs/bullmq';
+import { ImageOptimizationProcessor } from './queues/flash-cards.processor';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: FlashCard.name, schema: FlashCardSchema },
     ]),
+    BullModule.registerQueue({
+      name: 'image-optimize',
+      prefix: 'flash-cards',
+    }),
   ],
   controllers: [FlashCardsController],
   providers: [
@@ -18,6 +24,7 @@ import { FlashCardsRepository } from '@/repositories/flash-cards.repository';
       provide: 'FlashCardsRepositoryInterface',
       useClass: FlashCardsRepository,
     },
+    ImageOptimizationProcessor,
   ],
 })
 export class FlashCardsModule {}

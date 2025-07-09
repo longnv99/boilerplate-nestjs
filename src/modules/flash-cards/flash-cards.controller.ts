@@ -44,11 +44,19 @@ export class FlashCardsController {
     @UploadedFile() image: Express.Multer.File,
     @Body() createFlashCardDto: CreateFlashCardDto,
   ) {
-    return this.flashCardsService.create({
-      ...createFlashCardDto,
-      user: request.user,
-      image: image.originalname,
-    });
+    // return this.flashCardsService.create({
+    //   ...createFlashCardDto,
+    //   user: request.user,
+    //   image: image.originalname,
+    // });
+    return this.flashCardsService.createFlashCard(
+      {
+        ...createFlashCardDto,
+        user: request.user,
+        image: image.originalname,
+      },
+      image,
+    );
   }
 
   // @Get()
