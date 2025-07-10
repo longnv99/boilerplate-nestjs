@@ -17,6 +17,8 @@ import { CacheModule } from '@nestjs/cache-manager';
 import redisStore from '@keyv/redis';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TaskModule } from './tasks/task.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 
 @Module({
   imports: [
@@ -68,6 +70,23 @@ import { TaskModule } from './tasks/task.module';
       inject: [ConfigService],
     }),
     ScheduleModule.forRoot(),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        throttlers: [
+          {
+            ttl: configService.get<number>('THROTTLER_TTL'),
+            limit: configService.get<number>('THROTTLER_LIMIT'),
+          },
+        ],
+        storage: new ThrottlerStorageRedisService({
+          host: configService.get<string>('REDIS_HOST'),
+          port: configService.get<number>('REDIS_PORT'),
+          password: configService.get<string>('REDIS_PASSWORD'),
+        }),
+      }),
+      inject: [ConfigService],
+    }),
     AuthModule,
     UserRolesModule,
     UsersModule,
@@ -82,6 +101,10 @@ import { TaskModule } from './tasks/task.module';
     {
       provide: APP_GUARD,
       useClass: JwtAccessTokenGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })
