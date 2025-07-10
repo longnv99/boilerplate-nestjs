@@ -105,4 +105,22 @@ export class UsersService extends BaseServiceAbstract<User> {
       throw error;
     }
   }
+
+  async refreshLeaderboardCache() {
+    const leaderboard = await this.usersRepository.findAll(
+      {},
+      {
+        sort: { point: -1 },
+        limit: 100,
+      },
+    );
+
+    await this.cacheManager.set(
+      CACHE_KEY.USER_LEADERBOARD,
+      leaderboard,
+      CACHE_TTL.USER_LEADERBOARD,
+    );
+
+    return leaderboard;
+  }
 }

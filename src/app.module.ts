@@ -15,6 +15,8 @@ import { JwtAccessTokenGuard } from './modules/auth/guards/jwt-access-token.guar
 import { BullModule } from '@nestjs/bullmq';
 import { CacheModule } from '@nestjs/cache-manager';
 import redisStore from '@keyv/redis';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TaskModule } from './tasks/task.module';
 
 @Module({
   imports: [
@@ -65,12 +67,14 @@ import redisStore from '@keyv/redis';
       }),
       inject: [ConfigService],
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     UserRolesModule,
     UsersModule,
     TopicsModule,
     FlashCardsModule,
     CollectionModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [

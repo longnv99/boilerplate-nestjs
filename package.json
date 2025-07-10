@@ -48,6 +48,7 @@
     "@nestjs/mongoose": "^11.0.3",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.1.3",
+    "@nestjs/schedule": "^6.0.0",
     "@nestjs/swagger": "^11.2.0",
     "argon2": "^0.43.0",
     "bullmq": "^5.56.1",
@@ -120,6 +121,7 @@
       "^@/modules/(.*)$": "<rootDir>/src/modules/$1",
       "^@/repositories/(.*)$": "<rootDir>/src/repositories/$1",
       "^@/services/(.*)$": "<rootDir>/src/services/$1",
+      "^@/tasks/(.*)$": "<rootDir>/src/tasks/$1",
       "^@/types/(.*)$": "<rootDir>/src/types/$1"
     }
   }
