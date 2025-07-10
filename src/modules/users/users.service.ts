@@ -11,6 +11,9 @@ import { User } from './entities/user.entity';
 import { UserRolesService } from '../user-roles/user-roles.service';
 import { USER_ROLE } from '../user-roles/entities/user-role.entity';
 import { ERROR_DICTIONARY } from '@/constraints/error-dictionary.constraint';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { CACHE_KEY, CACHE_TTL } from '@/constraints/cache.constraint';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UsersService extends BaseServiceAbstract<User> {
@@ -18,6 +21,8 @@ export class UsersService extends BaseServiceAbstract<User> {
     @Inject('UsersRepositoryInterface')
     private readonly usersRepository: UsersRepository,
     private readonly userRolesService: UserRolesService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {
     super(usersRepository);
   }
@@ -65,6 +70,37 @@ export class UsersService extends BaseServiceAbstract<User> {
   async getUserWithRole(userId: string): Promise<User> {
     try {
       return await this.usersRepository.getUserWithRole(userId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getCacheUsers() {
+    try {
+      const cachedLeaderBoard = await this.cacheManager.get(
+        CACHE_KEY.USER_LEADERBOARD,
+      );
+
+      if (cachedLeaderBoard) {
+        console.log('cached leaderboard');
+        return cachedLeaderBoard;
+      }
+
+      const leaderboard = await this.usersRepository.findAll(
+        {},
+        {
+          sort: { point: -1 },
+          limit: 100,
+        },
+      );
+
+      await this.cacheManager.set(
+        CACHE_KEY.USER_LEADERBOARD,
+        leaderboard,
+        CACHE_TTL.USER_LEADERBOARD,
+      );
+
+      return leaderboard;
     } catch (error) {
       throw error;
     }

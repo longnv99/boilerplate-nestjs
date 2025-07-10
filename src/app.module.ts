@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -13,6 +13,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAccessTokenGuard } from './modules/auth/guards/jwt-access-token.guard';
 import { BullModule } from '@nestjs/bullmq';
+import { CacheModule } from '@nestjs/cache-manager';
+import redisStore from '@keyv/redis';
 
 @Module({
   imports: [
@@ -35,12 +37,6 @@ import { BullModule } from '@nestjs/bullmq';
       }),
       inject: [ConfigService],
     }),
-    AuthModule,
-    UserRolesModule,
-    UsersModule,
-    TopicsModule,
-    FlashCardsModule,
-    CollectionModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -52,6 +48,29 @@ import { BullModule } from '@nestjs/bullmq';
       }),
       inject: [ConfigService],
     }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        stores: [
+          new redisStore({
+            socket: {
+              host: configService.get<string>('REDIS_HOST'),
+              port: configService.get<number>('REDIS_PORT'),
+            },
+            password: configService.get<string>('REDIS_PASSWORD'),
+          }),
+        ],
+        ttl: configService.get<number>('REDIS_TTL'),
+      }),
+      inject: [ConfigService],
+    }),
+    AuthModule,
+    UserRolesModule,
+    UsersModule,
+    TopicsModule,
+    FlashCardsModule,
+    CollectionModule,
   ],
   controllers: [AppController],
   providers: [

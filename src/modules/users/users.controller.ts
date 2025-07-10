@@ -50,4 +50,9 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
+
+  @Get('leaderboard')
+  async getLeaderBoard() {
+    return this.usersService.getCacheUsers();
+  }
 }
