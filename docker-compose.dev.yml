@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  app_dev: # Đổi tên service để phân biệt
+  app_dev:
     container_name: boilerplate-nest-dev
     image: boilerplate-nest-dev
     build:

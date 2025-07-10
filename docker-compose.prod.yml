@@ -5,9 +5,38 @@ services:
     image: boilerplate-nest-prod
     build:
       context: .
-      # Không cần target, mặc định sẽ build giai đoạn cuối cùng
+      target: production
     ports:
       - "${PORT}:${PORT}"
+    depends_on:
+      - app_mongodb_prod
+      - app_redis_prod
     env_file:
-      - .env # Vẫn giữ để app NestJS bên trong đọc được
+      - .env
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:prod
+    restart: unless-stopped
+
+  app_mongodb_prod:
+    container_name: ${DATABASE_HOST}
+    image: mongo:7.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "${DATABASE_PORT}:27017"
+    volumes:
+      - ./mongo-data:/data/db 
+    restart: unless-stopped
+
+  app_redis_prod:
+    container_name: ${REDIS_HOST}
+    image: redis:7-alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_PORT}:6379
+    volumes:
+      - ./redis-data:/data
     restart: always
