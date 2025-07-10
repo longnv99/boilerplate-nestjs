@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { configSwagger } from './configs/api-docs.config';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
+import helmet from 'helmet';
+import { helmetConfig } from './configs/helmet.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +18,8 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
     }),
   );
   app.useGlobalFilters(new AllExceptionsFilter());
@@ -24,6 +28,7 @@ async function bootstrap() {
       ? origin.split(',').map((item) => item.trim())
       : origin,
   });
+  app.use(helmet(helmetConfig(configService)));
 
   await app.listen(port);
 }
