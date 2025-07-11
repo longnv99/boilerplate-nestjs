@@ -19,6 +19,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TaskModule } from './tasks/task.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
+import { SeederModule } from './common/seeder/seeder.module';
 
 @Module({
   imports: [
@@ -87,6 +88,7 @@ import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis'
       }),
       inject: [ConfigService],
     }),
+    SeederModule,
     AuthModule,
     UserRolesModule,
     UsersModule,

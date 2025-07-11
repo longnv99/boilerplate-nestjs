@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongoose';
 import {
   Inject,
   Injectable,
@@ -43,6 +44,12 @@ export class UsersService extends BaseServiceAbstract<User> {
       ...createUserDto,
       role: userRole._id,
     });
+  }
+
+  async createSeedUser(
+    createUserDto: CreateUserDto & { role: ObjectId | string },
+  ) {
+    return this.usersRepository.create(createUserDto);
   }
 
   async getUserByEmail(email: string) {

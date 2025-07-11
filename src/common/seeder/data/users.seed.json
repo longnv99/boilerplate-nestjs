@@ -1,0 +1,10 @@
+[
+    {
+        "firstName": "Admin",
+        "lastName": "Boilerplate",
+        "email": "admin@example.com",
+        "password": "Admin@123456",
+        "username": "admin",
+        "roleName": "ADMIN"
+    }
+]
