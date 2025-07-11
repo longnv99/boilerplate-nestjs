@@ -1,99 +1,183 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS Boilerplate for Production Projects
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A boilerplate project built with NestJS, providing a solid and well-structured foundation for developing robust and scalable backend applications. This project comes with built-in best practices for architecture, security, and workflow.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+![NestJS Logo](https://nestjs.com/img/logo-small.svg)
 
-## Description
+## ✨ Key Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Solid Foundation:** [NestJS v11](https://nestjs.com/) on [Node.js v22](https://nodejs.org/).
+- **Database:** Integrated with [Mongoose](https://mongoosejs.com/) for working with MongoDB.
+- **Professional Architecture:** Implements the **Repository Pattern** and **Generic Pattern** for clean separation of concerns and easy maintenance.
+- **Authentication & Authorization:**
+  - Authentication using **JWT** (Access Token & Refresh Token).
+  - Utilizes **Passport.js** with `local` and `jwt` strategies.
+  - Securely hashes passwords and Refresh Tokens with **Argon2**.
+  - Role-based authorization with custom Guards.
+- **Security:**
+  - Endpoints protected by **Global Guards**.
+  - **CSRF** (Cross-Site Request Forgery) protection.
+  - **XSS** (Cross-Site Scripting) protection with **Helmet** and Content Security Policy (CSP).
+  - API Rate Limiting with **Throttler**.
+- **Background Jobs & Caching:**
+  - Uses **BullMQ** and **Redis** for handling background jobs.
+  - Integrated **Cache Manager** with Redis to optimize API performance.
+  - Automatic cache updates using **Scheduled Tasks (Cron Jobs)**.
+- **Workflow:**
+  - **Docker & Docker Compose** for a consistent development environment.
+  - Integrated **Husky**, **Lint-Staged**, and **Commitlint** to ensure code quality and standardized commit messages.
+  - Automatic API documentation with **Swagger (OpenAPI)**.
+  - **CI/CD** integration with **GitHub Actions**.
 
-## Project setup
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (version 22.x or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [Docker](https://www.docker.com/products/docker-desktop/) (Optional, if you want to run with Docker)
+
+### Installation
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
+    cd your-repo-name
+    ```
+
+2.  **Create environment files:**
+    Create a `.env.development` file from the example. This file will be used for both Docker and local development.
+
+    ```bash
+    cp .env.example .env.development
+    ```
+
+    Then, open the newly created `.env.development` file and fill in the required values.
+
+3.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+---
+
+## 🏃 Running the Application
+
+You can choose one of the following three ways to run the application.
+
+### 1. Development Mode with Docker (Recommended)
+
+This method starts the entire system (NestJS, MongoDB, Redis) inside Docker containers, ensuring a consistent environment.
 
 ```bash
-$ npm install
+# Start and build (if necessary)
+npm run docker:dev:up
+
+# Stop and clean up
+npm run docker:dev:down
 ```
 
-## Compile and run the project
+- The application will be running at `http://localhost:<PORT>` (the port is defined in `.env.development`).
+- Supports hot-reloading when you change the source code.
+
+### 2. Fully Local Mode (Without Docker)
+
+This approach is suitable if you don't want to install Docker. You will need to install MongoDB and Redis manually on your machine.
+
+**Step 1: Install and run MongoDB & Redis on your machine.**
+
+- Ensure MongoDB is running on port `27017` and Redis is running on port `6379` (or reconfigure them in `.env.development`).
+
+**Step 2: Update the `.env.development` file**
+
+- Make sure the `DATABASE_HOST` and `REDIS_HOST` variables are set to `localhost`.
+
+**Step 3: Run the application**
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+# Run the app in development mode with hot-reload
+npm run start:dev
 ```
 
-## Run tests
+- The application will be running at `http://localhost:<PORT>` (the port is defined in `.env.development`).
+
+### 3. Local Debug Mode (Hybrid)
+
+This method runs the NestJS application on your host machine but connects to MongoDB and Redis running inside Docker containers. This is very useful for debugging with VS Code.
+
+**Step 1: Start background services in Docker**
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Start only MongoDB and Redis
+docker-compose -f docker-compose.dev.yml up -d app_mongodb_dev redis_dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+**Step 2: Run the application in debug mode**
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+npm run start:debug
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+- The application will be running at `http://localhost:<PORT>` (the port is defined in your `.env.debug` file).
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## 📚 API Documentation (Swagger)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+After starting the application, navigate to the following URL to view the interactive API documentation:
 
-## Support
+`http://localhost:<PORT>/swagger`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+This documentation page is protected by Basic Auth. Please use the `SWAGGER_USERNAME` and `SWAGGER_PASSWORD` defined in your `.env` file to log in.
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 🚢 Deploying to Production with Render
 
-## License
+This project is designed for easy deployment to PaaS platforms like Render.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Deployment Architecture
+
+- **NestJS Application:** Deployed on **Render** (as a Docker-based Web Service).
+- **MongoDB Database:** Uses an external service like **MongoDB Atlas** (which has a generous free tier).
+- **Redis:** Uses a managed **Redis service from Render** (which also has a free tier).
+
+### Deployment Steps
+
+1.  **Create a Web Service on Render:**
+    - Connect your GitHub account and select this repository.
+    - Choose **Docker** as the environment. Render will automatically find and use the `Dockerfile`.
+    - Select an instance type (e.g., Free tier).
+
+2.  **Create a Database on MongoDB Atlas:**
+    - Sign up and create a free cluster.
+    - **Configure Network Access (Very Important):**
+      - **Step A:** Go to the **Settings** tab of your Web Service on Render, find the **Outbound IP Addresses** section, and copy these IPs.
+      - **Step B:** Go back to MongoDB Atlas, navigate to **Network Access**, click **Add IP Address**, and paste the IPs you copied into the allowlist. This is the most secure approach.
+    - Get the Connection String (`mongodb+srv://...`).
+
+3.  **Create Redis on Render:**
+    - This is the recommended and simplest approach, as services will communicate over Render's secure internal network.
+    - On the Render dashboard, click **New +** -> **Key-Value Store (Redis)**. Render provides a Redis-compatible key-value store.
+    - Give it a name, select the same region as your Web Service, and choose the Free tier.
+    - Render will automatically provide an **Internal Connection URL**.
+
+4.  **Configure Environment Variables on Render:**
+    - Go back to your Web Service's dashboard on Render and navigate to the **"Environment"** tab.
+    - **`DATABASE_URL`**: Paste the connection string from MongoDB Atlas here.
+    - **`REDIS_URL`**: Click **Add Environment Variable**. Set the **Key** to `REDIS_URL`. For the **Value**, Render will allow you to directly select the internal connection URL for the Redis service you just created.
+    - **Note:** Ensure your code in `app.module.ts` is configured to read `REDIS_URL` for both BullMQ and CacheManager.
+
+5.  **Enable Auto-Deploy:**
+    - In the **"Settings"** tab of your Web Service, ensure **"Auto-Deploy"** is enabled and points to your `main` branch.
+
+Now, every time you push to the `main` branch, GitHub Actions will run your tests, and if they pass, Render will automatically build and deploy the latest version.
+
+---
+
+## 📄 Environment Variables
+
+Please refer to the `.env.development` file for a complete list of required environment variables and their meanings.
